@@ -88,7 +88,7 @@ def depthFirstSearch(problem):
     """
 
     path = [] # Path with actions to be returned
-    explored = [] # Visited nodes 
+    explored = set() # Visited nodes 
     node = {'state': problem.getStartState(), 'cost': 0}
     frontier = util.Stack()
     frontier.push((node, [])) # Push the node and the path
@@ -108,7 +108,7 @@ def depthFirstSearch(problem):
             child_node = {'state': successor[0], 'cost': successor[2], 'parent_node': node, 'action': successor[1]}  
             new_path = path + [child_node['action']] # Update path
             frontier.push((child_node, new_path))        
-        explored.append(node['state'])           
+        explored.add(node['state'])           
     
 
 
@@ -117,8 +117,8 @@ def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
 
     path = [] # Path with actions to be returned
-    explored = [] # Visited nodes 
-    node = {'state': problem.getStartState(), 'cost': 0}
+    explored = set() # Visited nodes 
+    node = {'state': problem.getStartState()}
     frontier = util.Queue()
     frontier.push((node, [])) # Push the node and the path
     
@@ -130,21 +130,20 @@ def breadthFirstSearch(problem):
         node,path = frontier.pop() 
         if node['state'] in explored: # Ignore explored nodes
             continue
-        explored.append(node['state']) 
         if problem.isGoalState(node['state']): # Reached our goal state
             return path
         successors = problem.getSuccessors(node['state'])
         for successor in successors:
-            child_node = {'state': successor[0], 'cost': successor[2], 'parent_node': node, 'action': successor[1]}  
+            child_node = {'state': successor[0], 'action': successor[1]}  
             new_path = path + [child_node['action']] # Update path
             frontier.push((child_node, new_path))        
-        explored.append(node['state'])          
+        explored.add(node['state'])               
                          
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
 
     path = [] # Path with actions to be returned
-    explored = [] # Visited nodes 
+    explored = set() # Visited nodes 
     node = {'state': problem.getStartState(), 'cost': 0}
     frontier = util.PriorityQueue()
     frontier.push((node, []), node['cost']) # Push the node and the path
@@ -157,7 +156,6 @@ def uniformCostSearch(problem):
         node,path = frontier.pop()  
         if node['state'] in explored: # Ignore explored nodes
             continue
-        explored.append(node['state']) 
         if problem.isGoalState(node['state']): # Reached our goal state
             return path
         successors = problem.getSuccessors(node['state'])
@@ -167,7 +165,7 @@ def uniformCostSearch(problem):
             priority = child_node['parent_node']['cost'] + child_node['cost']
             child_node['cost'] = priority
             frontier.update((child_node, new_path), priority)        
-        explored.append(node['state'])    
+        explored.add(node['state'])    
                               
 
 def nullHeuristic(state, problem=None):
@@ -181,7 +179,7 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
     path = [] # Path with actions to be returned
-    explored = [] # Visited nodes 
+    explored = set() # Visited nodes 
     node = {'state': problem.getStartState(), 'cost': 0}
     frontier = util.PriorityQueue()
     frontier.push((node, []), node['cost']) # Push the node and the path
@@ -194,7 +192,6 @@ def aStarSearch(problem, heuristic=nullHeuristic):
         node,path = frontier.pop()  
         if node['state'] in explored: # Ignore explored nodes
             continue
-        explored.append(node['state']) 
         if problem.isGoalState(node['state']): # Reached our goal state
             return path
         successors = problem.getSuccessors(node['state'])
@@ -205,7 +202,7 @@ def aStarSearch(problem, heuristic=nullHeuristic):
             total_cost = new_cost + heuristic(child_node['state'], problem)
             child_node['cost'] = new_cost
             frontier.update((child_node, new_path), total_cost)        
-        explored.append(node['state'])     
+        explored.add(node['state'])     
     util.raiseNotDefined()
 
 
