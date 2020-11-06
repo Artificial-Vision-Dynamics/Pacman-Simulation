@@ -89,11 +89,11 @@ def depthFirstSearch(problem):
 
     path = [] # Path with actions to be returned
     explored = set() # Visited nodes 
-    node = {'state': problem.getStartState(), 'cost': 0}
+    node = {'state': problem.getStartState(), 'cost': 0} # Node representation
     frontier = util.Stack()
     frontier.push((node, [])) # Push the node and the path
     
-    if problem.isGoalState(node['state']):
+    if problem.isGoalState(node['state']): # Reached our goal state
         return []
     while True:
         if frontier.isEmpty():
@@ -118,11 +118,11 @@ def breadthFirstSearch(problem):
 
     path = [] # Path with actions to be returned
     explored = set() # Visited nodes 
-    node = {'state': problem.getStartState()}
+    node = {'state': problem.getStartState()} # Node representation
     frontier = util.Queue()
     frontier.push((node, [])) # Push the node and the path
     
-    if problem.isGoalState(node['state']):
+    if problem.isGoalState(node['state']): # Reached our goal state
         return []
     while True:
         if frontier.isEmpty():
@@ -134,7 +134,7 @@ def breadthFirstSearch(problem):
             return path
         successors = problem.getSuccessors(node['state'])
         for successor in successors:
-            child_node = {'state': successor[0], 'action': successor[1]}  
+            child_node = {'state': successor[0], 'cost': successor[2], 'parent_node': node, 'action': successor[1]}  
             new_path = path + [child_node['action']] # Update path
             frontier.push((child_node, new_path))        
         explored.add(node['state'])               
@@ -144,7 +144,7 @@ def uniformCostSearch(problem):
 
     path = [] # Path with actions to be returned
     explored = set() # Visited nodes 
-    node = {'state': problem.getStartState(), 'cost': 0}
+    node = {'state': problem.getStartState(), 'cost': 0} # Node representation
     frontier = util.PriorityQueue()
     frontier.push((node, []), node['cost']) # Push the node and the path
     

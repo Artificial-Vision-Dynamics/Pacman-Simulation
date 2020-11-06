@@ -358,7 +358,7 @@ class CornersProblem(search.SearchProblem):
 def manhattanDistance(start, goal):
     xy1 = start
     xy2 = goal
-    return ( (xy1[0] - xy2[0]) ** 2 + (xy1[1] - xy2[1]) ** 2 ) ** 0.5
+    return abs(xy1[0] - xy2[0]) + abs(xy1[1] - xy2[1])
 
 def euclideanDistance(start, goal):
     xy1 = start
