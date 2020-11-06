@@ -146,14 +146,14 @@ def uniformCostSearch(problem):
     explored = set() # Visited nodes 
     node = {'state': problem.getStartState(), 'cost': 0} # Node representation
     frontier = util.PriorityQueue()
-    frontier.push((node, []), node['cost']) # Push the node and the path
+    frontier.push((node, []), node['cost']) # Push item: (node, path) based on priority:cost
     
     if problem.isGoalState(node['state']):
         return []
     while True:
         if frontier.isEmpty():
             raise Exception('Error in UCS')
-        node,path = frontier.pop()  
+        node,path = frontier.pop()  # Take node and path
         if node['state'] in explored: # Ignore explored nodes
             continue
         if problem.isGoalState(node['state']): # Reached our goal state
@@ -162,9 +162,9 @@ def uniformCostSearch(problem):
         for successor in successors:
             child_node = {'state': successor[0], 'cost': successor[2], 'parent_node': node, 'action': successor[1]}  
             new_path = path + [child_node['action']] # Update path
-            priority = child_node['parent_node']['cost'] + child_node['cost']
-            child_node['cost'] = priority
-            frontier.update((child_node, new_path), priority)        
+            priority = child_node['parent_node']['cost'] + child_node['cost'] # calculate cost from root to child_node
+            child_node['cost'] = priority # Update cost
+            frontier.update((child_node, new_path), priority) # Update necessary changes in frontier if needed    
         explored.add(node['state'])    
                               
 
@@ -182,7 +182,7 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     explored = set() # Visited nodes 
     node = {'state': problem.getStartState(), 'cost': 0}
     frontier = util.PriorityQueue()
-    frontier.push((node, []), node['cost']) # Push the node and the path
+    frontier.push((node, []), node['cost']) # Push item: (node, path) based on priority:cost
     
     if problem.isGoalState(node['state']):
         return []
@@ -198,10 +198,10 @@ def aStarSearch(problem, heuristic=nullHeuristic):
         for successor in successors:
             child_node = {'state': successor[0], 'cost': successor[2], 'parent_node': node, 'action': successor[1]}  
             new_path = path + [child_node['action']] # Update path
-            new_cost = child_node['parent_node']['cost'] + child_node['cost']  
-            total_cost = new_cost + heuristic(child_node['state'], problem)
-            child_node['cost'] = new_cost
-            frontier.update((child_node, new_path), total_cost)        
+            new_cost = child_node['parent_node']['cost'] + child_node['cost']  # Cost of root to child_node
+            total_cost = new_cost + heuristic(child_node['state'], problem) # new_cost + heuristic function cost
+            child_node['cost'] = new_cost # Update cost
+            frontier.update((child_node, new_path), total_cost) # Update necessary changes in frontier if needed       
         explored.add(node['state'])     
     util.raiseNotDefined()
 

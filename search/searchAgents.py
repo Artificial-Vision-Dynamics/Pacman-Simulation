@@ -303,9 +303,9 @@ class CornersProblem(search.SearchProblem):
         """
         Returns whether this search state is a goal state of the problem.
         """
-        visitedCorners = state[1]
-        for visited in visitedCorners:
-            if visited == 0:
+        visitedCorners = state[1] # states of corners
+        for visited in visitedCorners: # loop through corner states
+            if visited == 0: # at least 1 corner not visited so goalState not reached
                 return False
         return True
 
@@ -326,18 +326,18 @@ class CornersProblem(search.SearchProblem):
         successors = []
         for action in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
             x,y = state[0] # current position
-            visitedCorners = list(state[1])
+            visitedCorners = list(state[1]) # convert tuple to list
             dx, dy = Actions.directionToVector(action)
             nextx, nexty = int(x + dx), int(y + dy)
             hitsWall = self.walls[nextx][nexty]
             if not hitsWall: # avoid walls
                 next_position = (nextx, nexty)
                 for i in range(len(visitedCorners)):
-                    if next_position == self.corners[i] and visitedCorners[i] == 0:
-                        visitedCorners[i] = 1
-                next_state = (next_position, tuple(visitedCorners))
+                    if next_position == self.corners[i] and visitedCorners[i] == 0: # not visited corner is found
+                        visitedCorners[i] = 1 # mark as visited
+                next_state = (next_position, tuple(visitedCorners)) # update next state
                 stepCost = 1
-                successors.append((next_state, action, stepCost)) 
+                successors.append((next_state, action, stepCost)) # update successors
 
         self._expanded += 1 # DO NOT CHANGE
         return successors
@@ -355,11 +355,13 @@ class CornersProblem(search.SearchProblem):
             if self.walls[x][y]: return 999999
         return len(actions)
 
+# Manhattan distance heuristic function implementation
 def manhattanDistance(start, goal):
     xy1 = start
     xy2 = goal
     return abs(xy1[0] - xy2[0]) + abs(xy1[1] - xy2[1])
 
+# Euclidean distance heuristic function implementation
 def euclideanDistance(start, goal):
     xy1 = start
     xy2 = goal
@@ -384,14 +386,14 @@ def cornersHeuristic(state, problem):
     walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
     current_position = state[0]
 
-    if problem.isGoalState(state):
+    if problem.isGoalState(state): # check if is goal state
         return 0
     else:
-        distances = []
+        distances = [] # list with calculated distances from our heuristic function
 
         for i in range(len(corners)):
-            if corners[i] == 0: 
-                distance = manhattanDistance(current_position , problem.corners[i])
+            if corners[i] == 0: # if corner not visited
+                distance = manhattanDistance(current_position , problem.corners[i]) # calculate distance
                 distances.append(distance)        
 
         return max(distances)
@@ -490,11 +492,11 @@ def foodHeuristic(state, problem):
     foodCoordinates = foodGrid.asList()
     distances = []
 
-    if len(foodCoordinates) == 0:
+    if len(foodCoordinates) == 0: # No food left
         return 0
     else:
         for food in foodCoordinates:
-            distance = mazeDistance(position, food, problem.startingGameState)
+            distance = mazeDistance(position, food, problem.startingGameState) # calculate distance
             distances.append(distance)
         
         return max(distances)    
