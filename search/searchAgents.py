@@ -332,8 +332,8 @@ class CornersProblem(search.SearchProblem):
             hitsWall = self.walls[nextx][nexty]
             if not hitsWall: # avoid walls
                 next_position = (nextx, nexty)
-                for i in range(len(visitedCorners)):
-                    if next_position == self.corners[i] and visitedCorners[i] == 0: # not visited corner is found
+                for i in range(len(visitedCorners)): # loop through visited corners info
+                    if next_position == self.corners[i] and visitedCorners[i] == 0: # check whether next_poisition matches with non visited corner 
                         visitedCorners[i] = 1 # mark as visited
                 next_state = (next_position, tuple(visitedCorners)) # update next state
                 stepCost = 1
@@ -361,13 +361,6 @@ def manhattanDistance(start, goal):
     xy2 = goal
     return abs(xy1[0] - xy2[0]) + abs(xy1[1] - xy2[1])
 
-# Euclidean distance heuristic function implementation
-def euclideanDistance(start, goal):
-    xy1 = start
-    xy2 = goal
-    return ( (xy1[0] - xy2[0]) ** 2 + (xy1[1] - xy2[1]) ** 2 ) ** 0.5    
-
-
 def cornersHeuristic(state, problem):
     """
     A heuristic for the CornersProblem that you defined.
@@ -385,17 +378,17 @@ def cornersHeuristic(state, problem):
     corners = state[1]
     walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
     current_position = state[0]
+    distance = 0
 
     if problem.isGoalState(state): # check if is goal state
         return 0
     else:
-        distances = [] # list with calculated distances from our heuristic function
-
+        distances = []
         for i in range(len(corners)):
             if corners[i] == 0: # if corner not visited
-                distance = manhattanDistance(current_position , problem.corners[i]) # calculate distance
-                distances.append(distance)        
-
+                distance = manhattanDistance(current_position, problem.corners[i])   
+                distances.append(distance)
+        
         return max(distances)
 
 class AStarCornersAgent(SearchAgent):
@@ -489,17 +482,17 @@ def foodHeuristic(state, problem):
     problem.heuristicInfo['wallCount']
     """ 
     position, foodGrid = state
-    foodCoordinates = foodGrid.asList()
-    distances = []
+    foodCoordinates = foodGrid.asList() 
 
-    if len(foodCoordinates) == 0: # No food left
+    if len(foodCoordinates) == 0: # If no food left 
         return 0
     else:
+        distances = []
         for food in foodCoordinates:
-            distance = mazeDistance(position, food, problem.startingGameState) # calculate distance
+            distance = mazeDistance(position, food, problem.startingGameState) # calculate distance         
             distances.append(distance)
         
-        return max(distances)    
+        return max(distances)
 
 class ClosestDotSearchAgent(SearchAgent):
     "Search for all food using a sequence of searches"

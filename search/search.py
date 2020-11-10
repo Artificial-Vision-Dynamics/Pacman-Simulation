@@ -91,25 +91,24 @@ def depthFirstSearch(problem):
     explored = set() # Visited nodes 
     node = {'state': problem.getStartState(), 'cost': 0} # Node representation
     frontier = util.Stack()
-    frontier.push((node, [])) # Push the node and the path
+    frontier.push((node, [])) # Push initial node and path
     
-    if problem.isGoalState(node['state']): # Reached our goal state
+    if problem.isGoalState(node['state']): # Check if initial state is goal state
         return []
     while True:
         if frontier.isEmpty():
             raise Exception('Error in DFS')
-        node,path = frontier.pop() 
+        node,path = frontier.pop() # Pop node with path from frontier
         if node['state'] in explored: # Ignore explored nodes
             continue
         if problem.isGoalState(node['state']): # Reached our goal state
             return path
-        successors = problem.getSuccessors(node['state'])
+        successors = problem.getSuccessors(node['state']) # Get successors nodes
         for successor in successors:
             child_node = {'state': successor[0], 'cost': successor[2], 'parent_node': node, 'action': successor[1]}  
             new_path = path + [child_node['action']] # Update path
             frontier.push((child_node, new_path))        
-        explored.add(node['state'])           
-    
+        explored.add(node['state'])                                                             
 
 
 def breadthFirstSearch(problem):
@@ -118,26 +117,26 @@ def breadthFirstSearch(problem):
 
     path = [] # Path with actions to be returned
     explored = set() # Visited nodes 
-    node = {'state': problem.getStartState()} # Node representation
+    node = {'state': problem.getStartState(), 'cost': 0} # Node representation
     frontier = util.Queue()
-    frontier.push((node, [])) # Push the node and the path
+    frontier.push((node, [])) # Push initial node and path 
     
-    if problem.isGoalState(node['state']): # Reached our goal state
+    if problem.isGoalState(node['state']): # Check if initial state is goal state
         return []
     while True:
         if frontier.isEmpty():
             raise Exception('Error in BFS')
-        node,path = frontier.pop() 
+        node,path = frontier.pop() # Pop node with path from frontier
         if node['state'] in explored: # Ignore explored nodes
-            continue
-        if problem.isGoalState(node['state']): # Reached our goal state
+            continue   
+        if problem.isGoalState(node['state']): # Reached our goal state  
             return path
-        successors = problem.getSuccessors(node['state'])
+        successors = problem.getSuccessors(node['state']) # Get successors nodes
         for successor in successors:
             child_node = {'state': successor[0], 'cost': successor[2], 'parent_node': node, 'action': successor[1]}  
             new_path = path + [child_node['action']] # Update path
             frontier.push((child_node, new_path))        
-        explored.add(node['state'])               
+        explored.add(node['state'])          
                          
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
@@ -148,7 +147,7 @@ def uniformCostSearch(problem):
     frontier = util.PriorityQueue()
     frontier.push((node, []), node['cost']) # Push item: (node, path) based on priority:cost
     
-    if problem.isGoalState(node['state']):
+    if problem.isGoalState(node['state']): # Check if initial state is goal state
         return []
     while True:
         if frontier.isEmpty():
@@ -198,8 +197,8 @@ def aStarSearch(problem, heuristic=nullHeuristic):
         for successor in successors:
             child_node = {'state': successor[0], 'cost': successor[2], 'parent_node': node, 'action': successor[1]}  
             new_path = path + [child_node['action']] # Update path
-            new_cost = child_node['parent_node']['cost'] + child_node['cost']  # Cost of root to child_node
-            total_cost = new_cost + heuristic(child_node['state'], problem) # new_cost + heuristic function cost
+            new_cost = child_node['parent_node']['cost'] + child_node['cost']  # new_cost = Cost of root to child_node
+            total_cost = new_cost + heuristic(child_node['state'], problem) # total_cost = new_cost + heuristic function cost
             child_node['cost'] = new_cost # Update cost
             frontier.update((child_node, new_path), total_cost) # Update necessary changes in frontier if needed       
         explored.add(node['state'])     
