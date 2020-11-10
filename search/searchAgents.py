@@ -488,11 +488,34 @@ def foodHeuristic(state, problem):
         return 0
     else:
         distances = []
+        
         for food in foodCoordinates:
             distance = mazeDistance(position, food, problem.startingGameState) # calculate distance         
             distances.append(distance)
         
         return max(distances)
+
+###################################################################################
+# The previous heuristic is a little bit slow, however the autogrades returns 5/4 # 
+# Here is a much faster heuristc, but the autograder returns 4/5                  #
+# The difference is the function called for calculation of distances
+# Uncomment it if you want, and comment the previous heuristic function           #
+###################################################################################
+
+# def foodHeuristic(state, problem): 
+#     position, foodGrid = state
+#     foodCoordinates = foodGrid.asList() 
+
+#     if len(foodCoordinates) == 0: # If no food left 
+#         return 0
+#     else:
+#         distances = []
+
+#         for food in foodCoordinates:
+#             distance = manhattanDistance(position, food) # calculate distance         
+#             distances.append(distance)
+        
+#         return max(distances)           
 
 class ClosestDotSearchAgent(SearchAgent):
     "Search for all food using a sequence of searches"
