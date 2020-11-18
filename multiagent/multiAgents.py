@@ -28,7 +28,6 @@ class ReflexAgent(Agent):
     headers.
     """
 
-
     def getAction(self, gameState):
         """
         You do not need to change this method, but you're welcome to.
@@ -40,7 +39,7 @@ class ReflexAgent(Agent):
         """
         # Collect legal moves and successor states
         legalMoves = gameState.getLegalActions()
-
+        
         # Choose one of the best actions
         scores = [self.evaluationFunction(gameState, action) for action in legalMoves]
         bestScore = max(scores)
@@ -48,7 +47,6 @@ class ReflexAgent(Agent):
         chosenIndex = random.choice(bestIndices) # Pick randomly among the best
 
         "Add more of your code here if you want to"
-
         return legalMoves[chosenIndex]
 
     def evaluationFunction(self, currentGameState, action):
@@ -74,7 +72,45 @@ class ReflexAgent(Agent):
         newScaredTimes = [ghostState.scaredTimer for ghostState in newGhostStates]
 
         "*** YOUR CODE HERE ***"
-        return successorGameState.getScore()
+        totalScore = 0 # score to be returned 
+        scareFlag = 0 # flag to know if ghosts are scared
+
+        # Case where ghosts are scared so hunt ghosts
+        for newScaredTime in newScaredTimes:
+            if newScaredTime != 0:
+                scareFlag = 1
+                break
+        
+        if scareFlag == 1: # try to kill ghosts
+            ghostDistances = []
+            for newGhostState in newGhostStates:
+                ghostDistance = manhattanDistance(newPos, newGhostState.getPosition())
+                ghostDistances.append(ghostDistance)
+            totalScore = -min(ghostDistances)       
+            return totalScore              
+
+        # Avoid situation where proposed position matches with ghost position        
+        for newGhostState in newGhostStates:
+            if newPos == newGhostState.getPosition():
+                return -1234567
+
+        # Calculating all distances from proposed position to all food coordinates
+        # Taking minimum distance and returning the opposite number because  
+        # our function returns a number, where higher numbers are better
+        foodDistances = []
+        currPosition = successorGameState.getPacmanPosition()
+        for foodCoordinate in currentGameState.getFood().asList():
+            foodDistance = manhattanDistance(newPos, foodCoordinate)
+            foodDistances.append(foodDistance)
+        totalScore = -min(foodDistances)    
+        
+        # A small penalty to Stop action
+        if action == 'Stop':
+            totalScore-=10
+            
+        return totalScore
+
+        # return successorGameState.getScore()
 
 def scoreEvaluationFunction(currentGameState):
     """
