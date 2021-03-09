@@ -1,5 +1,5 @@
 # Pacman-Simulation
-Created a pacman simulation in Python, as a part of Berkeley's University Artificial Intelligence course. Depth-first, breadth-first, uniform cost, A* search, minimax and expectimax algorithms were implemented.
+Created a pacman simulation in Python, as a part of Berkeley's University Artificial Intelligence course. Project is divided into two parts. Firstly a basic agent and some search algorithms are implemented. In the second part, the problem became more complex while designing intelligent multiagents.
 
 ## Search - Part 1
 In this project, Pacman agent finds paths through his maze world, both to reach a particular location and to collect food efficiently. General search algorithms were built and applied them to Pacman scenarios. For more information, visit https://inst.eecs.berkeley.edu/~cs188/sp20/project1/.
