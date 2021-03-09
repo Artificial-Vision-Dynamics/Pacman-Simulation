@@ -14,8 +14,9 @@ In this project, Pacman agent finds paths through his maze world, both to reach 
 In this project, agents for the classic version of Pacman were designed, including ghosts. Along the way, both minimax and expectimax search were implemented. I also experimented with evaluation function design.
 
 ### Questions
-Q1: Reflex Agent
-Q2: Minimax
-Q3: Alpha-Beta Pruning
-Q4: Expectimax
-Q5: Evaluation Function
+1. Reflex Agent
+2. Minimax
+3. Alpha-Beta Pruning
+4. Expectimax
+5. Evaluation Function
+
